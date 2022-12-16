@@ -1,0 +1,8 @@
+entities\Proyecto.class
+dao\AlumnoDao.class
+dao\IDAO.class
+entities\Tutor.class
+dao\ProyectoDao.class
+run\Run.class
+dao\TutorDao.class
+entities\Alumno.class
