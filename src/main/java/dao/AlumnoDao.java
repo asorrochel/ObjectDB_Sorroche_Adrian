@@ -43,14 +43,17 @@ public class AlumnoDao implements IDAO<Alumno>{
 
     @Override
     public boolean modificar(int idAlumno, Alumno nuevo) {
+        em.getTransaction().begin();
         Alumno old = em.find(Alumno.class, idAlumno);
         if (old != null) {
             old.setApellidos(nuevo.getApellidos());
             old.setNombre(nuevo.getNombre());
             old.setCurso(nuevo.getCurso());
             old.setTurno(nuevo.getTurno());
+            em.getTransaction().commit();
             return true;
         } else
+            em.getTransaction().rollback();
             return false;
     }
 

@@ -43,13 +43,16 @@ public class TutorDao implements IDAO<Tutor>{
 
     @Override
     public boolean modificar(int id, Tutor nuevo) {
+        em.getTransaction().begin();
         Tutor old = em.find(Tutor.class, id);
         if (old != null) {
             old.setCuerpo(nuevo.getCuerpo());
             old.setNombre(nuevo.getNombre());
             old.setTurno(nuevo.getTurno());
+            em.getTransaction().commit();
             return true;
         } else
+            em.getTransaction().rollback();
             return false;
     }
 

@@ -78,7 +78,7 @@ public class Tutor implements Serializable{
 
     @Override
     public String toString() {
-        return "Tutor{" + "idTutor=" + idTutor + ", nombre=" + nombre + ", cuerpo=" + cuerpo + ", turno=" + turno + '}';
+        return "Tutor: " + "\n Id: " + idTutor + "\n Nombre:" + nombre + "\n Cuerpo: " + cuerpo + "\n Turno: " + turno;
     }
     
     

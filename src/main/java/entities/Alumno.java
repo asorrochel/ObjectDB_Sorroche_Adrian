@@ -1,7 +1,7 @@
 package entities;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.*;
 
 @Entity
@@ -20,8 +20,8 @@ public class Alumno implements Serializable {
     private String turno;
     @Column(name = "curso")
     private String curso;
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idAlumno")
-//    private Collection<Proyecto> proyectoCollection;
+    @OneToMany(mappedBy = "idAlumno")
+    private List<Proyecto> listaProyectos;
 
     public Alumno() {
     }
@@ -79,18 +79,18 @@ public class Alumno implements Serializable {
     }
 
 //    public Collection<Proyecto> getProyectoCollection() {
-//        return proyectoCollection;
+//        return listaProyectos;
 //    }
 //
-//    public void setProyectoCollection(Collection<Proyecto> proyectoCollection) {
-//        this.proyectoCollection = proyectoCollection;
+//    public void setProyectoCollection(Collection<Proyecto> listaProyectos) {
+//        this.listaProyectos = listaProyectos;
 //    }
     
     
 
     @Override
     public String toString() {
-        return "Alumno{" + "idAlumno=" + idAlumno + ", nombre=" + nombre + ", apellidos=" + apellidos + ", turno=" + turno + ", curso=" + curso + '}';
+        return "Alumno: " + "\n ID: " + idAlumno + "\n Nombre: " + nombre + "\n Apellidos: " + apellidos + "\n Turno: " + turno + "\n Curso: " + curso;
     }
     
     
