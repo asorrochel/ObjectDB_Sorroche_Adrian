@@ -18,7 +18,8 @@ public class SwingAlumnoCRUD extends javax.swing.JFrame {
     public SwingAlumnoCRUD() {
         initComponents();
         
-        emf = Persistence.createEntityManagerFactory("E:\\Datos\\Estudios\\IES COMERCIO - DUAL_DAM_DAW\\DUAL_DAM_DAW_2\\Acceso_Datos\\objectdb-2.8.8\\db\\institutos.odb");
+        //emf = Persistence.createEntityManagerFactory("E:\\Datos\\Estudios\\IES COMERCIO - DUAL_DAM_DAW\\DUAL_DAM_DAW_2\\Acceso_Datos\\objectdb-2.8.8\\db\\institutos.odb");
+        emf = Persistence.createEntityManagerFactory("C:\\Users\\Vespertino\\Downloads\\objectdb-2.8.8\\db\\institutos.odb");
         em = emf.createEntityManager();
         dal = new AlumnoDao(em);
         jid.setText(Integer.toString(obtenerIdMasAltoNuevo()));
