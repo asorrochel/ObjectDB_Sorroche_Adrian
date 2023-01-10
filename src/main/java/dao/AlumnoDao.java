@@ -12,18 +12,20 @@ public class AlumnoDao implements IDAO<Alumno>{
 
     @Override
     public boolean insertar(Alumno o) {
-        try {
-            if(em.find(Alumno.class, o.getIdAlumno()) == null){
+        if(em.find(Alumno.class, o.getIdAlumno()) == null){
+            try {
                 em.getTransaction().begin();
                 em.persist(o);
                 em.getTransaction().commit();
                 return true;
+            } catch(Exception e){
+                e.printStackTrace();
+                em.getTransaction().rollback();
+                return false;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            em.getTransaction().rollback();
+        } else {
+            return false;
         }
-        return false;
     }
 
     @Override

@@ -6,6 +6,7 @@ import entities.Alumno;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.swing.JOptionPane;
 import static run.Run.em;
@@ -18,11 +19,11 @@ public class SwingAlumnoCRUD extends javax.swing.JFrame {
     public SwingAlumnoCRUD() {
         initComponents();
         
-        //emf = Persistence.createEntityManagerFactory("E:\\Datos\\Estudios\\IES COMERCIO - DUAL_DAM_DAW\\DUAL_DAM_DAW_2\\Acceso_Datos\\objectdb-2.8.8\\db\\institutos.odb");
-        emf = Persistence.createEntityManagerFactory("C:\\Users\\Vespertino\\Downloads\\objectdb-2.8.8\\db\\institutos.odb");
+        emf = Persistence.createEntityManagerFactory("E:\\Datos\\Estudios\\IES COMERCIO - DUAL_DAM_DAW\\DUAL_DAM_DAW_2\\Acceso_Datos\\objectdb-2.8.8\\db\\institutos.odb");
+        //emf = Persistence.createEntityManagerFactory("C:\\Users\\Vespertino\\Downloads\\objectdb-2.8.8\\db\\institutos.odb");
         em = emf.createEntityManager();
         dal = new AlumnoDao(em);
-        jid.setText(Integer.toString(obtenerIdMasAltoNuevo()));
+        jid.setText(Integer.toString(obtenerIdMasAltoAlumno()));
     }
 
     @SuppressWarnings("unchecked")
@@ -78,6 +79,11 @@ public class SwingAlumnoCRUD extends javax.swing.JFrame {
 
         btn_update.setFont(new java.awt.Font("Franklin Gothic Heavy", 0, 14)); // NOI18N
         btn_update.setText("Modificar");
+        btn_update.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_updateActionPerformed(evt);
+            }
+        });
 
         btn_consultar.setFont(new java.awt.Font("Franklin Gothic Heavy", 0, 14)); // NOI18N
         btn_consultar.setText("Consultar");
@@ -192,9 +198,15 @@ public class SwingAlumnoCRUD extends javax.swing.JFrame {
 
     private void btn_InsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_InsertarActionPerformed
 
-        dal.insertar(recogerDatos());
-        if(dal.insertar(recogerDatos()) == true) {
+        boolean condicion = dal.insertar(recogerDatos());
+        if(condicion == true) {
             JOptionPane.showMessageDialog(this, "ALUMNO INSERTADO CORRECTAMENTE", "PERFECTO", JOptionPane.INFORMATION_MESSAGE);
+            //setear valores por defecto si se ha insertado correctamente un alumno
+            jid.setText(Integer.toString(obtenerIdMasAltoAlumno()));
+            jNombre.setText("");
+            jApe.setText("");
+            jCbCurso.setSelectedItem("1º MULWEB");
+            jCbTurno1.setSelectedItem("Vespertino");
         } else {
             JOptionPane.showMessageDialog(this, "ALUMNO NO SE HA PODIDO INSERTAR CORRECTAMENTE", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -202,9 +214,10 @@ public class SwingAlumnoCRUD extends javax.swing.JFrame {
 
     private void btn_borrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_borrarActionPerformed
         // TODO add your handling code here:
-        dal.borrar(Integer.parseInt(jid.getText()));
-        if( dal.borrar(Integer.parseInt(jid.getText())) == true) {
+        boolean condicion = dal.borrar(Integer.parseInt(jid.getText()));
+        if(condicion == true) {
             JOptionPane.showMessageDialog(this, "ALUMNO BORRADO CORRECTAMENTE", "PERFECTO", JOptionPane.INFORMATION_MESSAGE);
+            jid.setText(Integer.toString(obtenerIdMasAltoAlumno()));
         } else {
             JOptionPane.showMessageDialog(this, "ALUMNO NO SE HA PODIDO BORRAR", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -212,12 +225,23 @@ public class SwingAlumnoCRUD extends javax.swing.JFrame {
 
     private void btn_consultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_consultarActionPerformed
         // TODO add your handling code here:
-        Alumno a = dal.consultar(Integer.parseInt(jid.getText()));
-        jNombre.setText(a.getNombre());
-        jApe.setText(a.getApellidos());
-        jid.setText(Integer.toString(a.getIdAlumno()));
-        jNombre.setText(a.getNombre());
+        try {
+            Alumno a = dal.consultar(Integer.parseInt(jid.getText()));
+            jNombre.setText(a.getNombre());
+            jApe.setText(a.getApellidos());
+            jid.setText(Integer.toString(a.getIdAlumno()));
+            jCbCurso.setSelectedItem(a.getCurso());
+            jCbTurno1.setSelectedItem(a.getTurno());
+
+        } catch (NullPointerException ex) {
+            JOptionPane.showMessageDialog(this, "EL ALUMNO CON ESE ID NO EXISTE", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
     }//GEN-LAST:event_btn_consultarActionPerformed
+
+    private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_updateActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -259,7 +283,7 @@ public class SwingAlumnoCRUD extends javax.swing.JFrame {
         return a;
     }
     
-    private static int obtenerIdMasAltoNuevo(){
+    private static int obtenerIdMasAltoAlumno(){
         int id;
         
         try {
@@ -271,7 +295,7 @@ public class SwingAlumnoCRUD extends javax.swing.JFrame {
             } else {
                 return id+1;
             }
-        } catch ( NullPointerException e) {
+        } catch ( PersistenceException e) {
             //Si no hay ningun proyecto creado, es decir hay 0, la consulta nos devolvera Null, asi que al primer proyecto le asignaremos el valor 1, después ya se autoincrementará
             return 1;
         }
