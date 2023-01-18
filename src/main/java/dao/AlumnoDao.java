@@ -42,16 +42,25 @@ public class AlumnoDao implements IDAO<Alumno>{
             return false;
         }
     }
-
+    
     @Override
     public boolean modificar(int idAlumno, Alumno nuevo) {
         em.getTransaction().begin();
         Alumno old = em.find(Alumno.class, idAlumno);
         if (old != null) {
-            old.setApellidos(nuevo.getApellidos());
-            old.setNombre(nuevo.getNombre());
-            old.setCurso(nuevo.getCurso());
-            old.setTurno(nuevo.getTurno());
+            
+            if(nuevo.getNombre()!= null) {
+                old.setNombre(nuevo.getNombre());
+            }
+            if (nuevo.getApellidos()!= null) {
+                old.setApellidos(nuevo.getApellidos());
+            }
+            if (nuevo.getCurso()!= null) {
+                old.setCurso(nuevo.getCurso());
+            }
+            if (nuevo.getTurno()!= null) {
+                old.setTurno(nuevo.getTurno());
+            }
             em.getTransaction().commit();
             return true;
         } else

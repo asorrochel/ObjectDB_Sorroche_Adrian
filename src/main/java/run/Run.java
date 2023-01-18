@@ -49,7 +49,7 @@ public class Run {
         //INSERTAR
         
             //insertamos 2 ALUMNOS a la BD
-            CrearEinsertarAlumnos(2);
+            //CrearEinsertarAlumnos(2);
             //insertamos 3 TUTORES a la BD
             //CrearEinsertarTutores(3);
             //insertamos 2 PROYECTOS
@@ -62,24 +62,24 @@ public class Run {
             //Borrado de un TUTOR por su ID
 //          tudao.borrar(973);
             //Borrado de un PROYECTO por su ID
-            //prdao.borrar(468);
+            //prdao.borrar(1);
 
         //UPDATE
         
             //Update del nombre de un ALUMNO por su ID
 //            Alumno nuevo = new Alumno();
 //            nuevo.setNombre("NOMBRE MODIFICADO");
-//            aldao.modificar(479, nuevo);
+//            aldao.modificar(1, nuevo);
 
             //Update del nombre de un TUTOR por su ID
 //            Tutor nuevo = new Tutor();
-//            nuevo.setNombre("TUTOR 208 NOMBRE MODIFICADO");
-//            tudao.modificar(208, nuevo);
+//            nuevo.setNombre("TUTOR 1 NOMBRE MODIFICADO");
+//            tudao.modificar(1, nuevo);
 
             //Update del nombre de un PROYECTO por su ID
 //            Proyecto nuevo2 = new Proyecto();
-//            nuevo.setNombre("Prueba 2.0");
-//            prdao.modificar(268, nuevo2);
+//            nuevo2.setNombre("Proyecto 2 actualizado");
+//            prdao.modificar(2, nuevo2);
 
         //CONSULTA
         
@@ -92,13 +92,30 @@ public class Run {
 //            System.out.println(t.toString());
 
             //Consulta de los datos de un PROYECTO por su ID
-//            Proyecto p = prdao.consultar(468);
-//            System.out.println(t.toString());
+//            Proyecto p = prdao.consultar(2);
+//            System.out.println(p.toString());
 
 
             //INSERTAR UN ALUMNO
-            //INSERTAR UN TUTOR
-            //INSERTAR UN PROYECTO
+//            Alumno aPrueba = new Alumno(obtenerIdMasAltoAlumno());
+//            aPrueba.setNombre("Adrian");
+//            aPrueba.setApellidos("Sorroche");
+//            aPrueba.setCurso("2º MULWEB");
+//            aPrueba.setTurno("Vespertino");
+//            aldao.insertar(aPrueba);
+////            //INSERTAR UN TUTOR
+//            Tutor tPrueba = new Tutor(obtenerIdMasAltoTutor());
+//            tPrueba.setNombre("Pedro");
+//            tPrueba.setTurno("Vespertino");
+//            tudao.insertar(tPrueba);
+//            //INSERTAR UN PROYECTO
+//            Proyecto pPrueba = new Proyecto(obtenerIdMasAltoProyecto());
+//            pPrueba.setNombre("Proyecto Prueba");
+//            pPrueba.setDescripcion("Proyecto de prueba para probar");
+//            pPrueba.setHorasEstimadas(50);
+//            pPrueba.setIdAlumno(aPrueba);
+//            pPrueba.setIdTutor(tPrueba);
+//            prdao.insertar(pPrueba);
     }
 
     private static void CrearEinsertarAlumnos(int j) {
@@ -118,7 +135,7 @@ public class Run {
     private static void CrearEinsertarTutores(int j) {
         for (int i = 0; i < j; i++) {
             ramdomCursoTurno();
-            Tutor t = new Tutor(f.random().nextInt(0, 999));
+            Tutor t = new Tutor(obtenerIdMasAltoTutor());
             t.setNombre(f.name().firstName());
             t.setTurno(turno);
             t.setCuerpo("cuerpo "+i);
@@ -133,20 +150,13 @@ public class Run {
             Tutor tTemp = listaTutores.get(f.random().nextInt(0, listaTutores.size()-1));
             Alumno tAlum = listaAlumnos.get(f.random().nextInt(0, listaAlumnos.size()-1));
             
-            System.out.println(tTemp.getIdTutor());
-            
             Proyecto p = new Proyecto(obtenerIdMasAltoProyecto());
             p.setDescripcion("descripcion "+i);
             p.setHorasEstimadas(f.random().nextInt(0, 500));
             p.setNombre(f.programmingLanguage().name());
             p.setIdAlumno(tAlum);
-            if(comprobarIdTutor(tTemp.getIdTutor()) == true) {
-                p.setIdTutor(tTemp);
-                //insertamos el proyecto a la BD
-                prdao.insertar(p);
-            } else {
-                System.out.println("No se puede insertar el proyecto ya que el tutor ya tiene un proyecto asignado");
-            }
+            p.setIdTutor(tTemp);
+            prdao.insertar(p);
         }
     }
     
@@ -162,7 +172,6 @@ public class Run {
             turno = "Diurno";
         }
     }
-    
     /**
      * Metodo que devuelve el siguiente valor del id que deberá llevar el siguiente proyecto a insertar en la BD
      * @return id del proyecto con el valor mas alto en la BD + 1
@@ -173,25 +182,23 @@ public class Run {
         try {
             Query q = em.createQuery("SELECT MAX(f.id) FROM Proyecto f");
             id = ((int)q.getSingleResult());
-            System.out.println(id+1);
             if(id == 0) {
                 return 1;
             } else {
                 return id+1;
             }
-        } catch ( PersistenceException e) {
+        } catch ( NullPointerException e) {
             //Si no hay ningun proyecto creado, es decir hay 0, la consulta nos devolvera Null, asi que al primer proyecto le asignaremos el valor 1, después ya se autoincrementará
             return 1;
         }
     }
-    
     private static int obtenerIdMasAltoAlumno(){
         int id;
         
         try {
             Query q = em.createQuery("SELECT MAX(f.idAlumno) FROM Alumno f");
             id = ((int)q.getSingleResult());
-            System.out.println(id+1);
+            
             if(id == 0) {
                 return 1;
             } else {
@@ -202,7 +209,6 @@ public class Run {
             return 1;
         }
     }
-    
     /**
      * Metodo que devuelve el siguiente valor del id que deberá llevar el siguiente tutor a insertar en la BD
      * @return id del proyecto con el valor mas alto en la BD + 1
@@ -213,35 +219,15 @@ public class Run {
         try {
             Query q = em.createQuery("SELECT MAX(f.idTutor) FROM Tutor f");
             id = ((int)q.getSingleResult());
-            System.out.println(id+1);
+           
             if(id == 0) {
                 return 1;
             } else {
                 return id+1;
             }
-        } catch ( PersistenceException e) {
+        } catch ( NullPointerException e) {
             //Si no hay ningun proyecto creado, es decir hay 0, la consulta nos devolvera Null, asi que al primer proyecto le asignaremos el valor 1, después ya se autoincrementará
             return 1;
-        }
-    }
-    
-    /**
-     * Metodo que comprueba si un Tutor tiene asignado un proyecto o no
-     * @param t
-     * @return 
-     */
-    private static boolean comprobarIdTutor(int t){
-        Query q = em.createQuery("SELECT c FROM Tutor c WHERE c.idTutor = :idTutor",Tutor.class);
-        q.setParameter("idTutor", t);
-        List<Tutor> listaTutores = q.getResultList();
-        
-        Proyecto pa = listaTutores.get(0).getProyecto();
-        if(pa == null) {
-            System.out.println("El tutor no tiene proyecto");
-            return true;
-        } else {
-            System.out.println("El tutor tiene proyecto asignado");
-            return false;
         }
     }
 }

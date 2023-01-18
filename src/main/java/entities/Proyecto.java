@@ -89,7 +89,7 @@ public class Proyecto implements Serializable {
 
     @Override
     public String toString() {
-        return "Proyecto{" + "id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", horasEstimadas=" + horasEstimadas + ", idAlumno=" + idAlumno + ", idTutor=" + idTutor + '}';
+        return "Proyecto: " +id + "\n Nombre: " + nombre + "\n Descripcion: " + descripcion + "\n Horas Estimadas: " + horasEstimadas + "\n" + idAlumno +"\n" + idTutor;
     }
     
     

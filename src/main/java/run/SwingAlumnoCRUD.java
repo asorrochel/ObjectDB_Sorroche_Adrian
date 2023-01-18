@@ -241,6 +241,13 @@ public class SwingAlumnoCRUD extends javax.swing.JFrame {
 
     private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
         // TODO add your handling code here:
+        boolean condicion = dal.modificar(Integer.parseInt(jid.getText()), recogerDatos());
+        if(condicion == true) {
+            JOptionPane.showMessageDialog(this, "ALUMNO ACTUALIZADO CORRECTAMENTE", "PERFECTO", JOptionPane.INFORMATION_MESSAGE);
+            dal.consultar(recogerDatos().getIdAlumno());
+        } else {
+            JOptionPane.showMessageDialog(this, "ALUMNO NO SE HA PODIDO ACTUALIZAR", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btn_updateActionPerformed
 
     public static void main(String args[]) {

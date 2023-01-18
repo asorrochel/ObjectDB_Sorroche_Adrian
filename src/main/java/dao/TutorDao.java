@@ -46,9 +46,21 @@ public class TutorDao implements IDAO<Tutor>{
         em.getTransaction().begin();
         Tutor old = em.find(Tutor.class, id);
         if (old != null) {
-            old.setCuerpo(nuevo.getCuerpo());
-            old.setNombre(nuevo.getNombre());
-            old.setTurno(nuevo.getTurno());
+            if(nuevo.getCuerpo() != null) {
+                old.setCuerpo(nuevo.getCuerpo());
+            }
+            if (nuevo.getNombre() != null) {
+                old.setNombre(nuevo.getNombre());
+            }
+            if (nuevo.getTurno() != null) {
+                old.setTurno(nuevo.getTurno());
+            }
+            if (nuevo.getTurno() != null) {
+                old.setTurno(nuevo.getTurno());
+            }
+            if (nuevo.getProyecto()!= null) {
+                old.setProyecto(nuevo.getProyecto());
+            }
             em.getTransaction().commit();
             return true;
         } else

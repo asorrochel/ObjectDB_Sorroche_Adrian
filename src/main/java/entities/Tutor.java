@@ -78,8 +78,10 @@ public class Tutor implements Serializable{
 
     @Override
     public String toString() {
-        return "Tutor: " + "\n Id: " + idTutor + "\n Nombre:" + nombre + "\n Cuerpo: " + cuerpo + "\n Turno: " + turno;
+        if(proyecto != null) {
+            return "Tutor: " + "\n Id: " + idTutor + "\n Nombre:" + nombre + "\n Cuerpo: " + cuerpo + "\n Turno: " + turno + "\n Proyecto: " + proyecto.getId();
+        } else {
+            return "Tutor: " + "\n Id: " + idTutor + "\n Nombre:" + nombre + "\n Cuerpo: " + cuerpo + "\n Turno: " + turno + "\n Proyecto: " + "Sin Proyecto asignado";
+        }
     }
-    
-    
 }
