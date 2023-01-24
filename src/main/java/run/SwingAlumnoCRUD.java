@@ -9,7 +9,6 @@ import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.swing.JOptionPane;
-import static run.Run.em;
 
 public class SwingAlumnoCRUD extends javax.swing.JFrame {
     static EntityManagerFactory emf;
@@ -21,8 +20,11 @@ public class SwingAlumnoCRUD extends javax.swing.JFrame {
         
         emf = Persistence.createEntityManagerFactory("E:\\Datos\\Estudios\\IES COMERCIO - DUAL_DAM_DAW\\DUAL_DAM_DAW_2\\Acceso_Datos\\objectdb-2.8.8\\db\\institutos.odb");
         //emf = Persistence.createEntityManagerFactory("C:\\Users\\Vespertino\\Downloads\\objectdb-2.8.8\\db\\institutos.odb");
+        
         em = emf.createEntityManager();
         dal = new AlumnoDao(em);
+        
+        //Esblecemos el campo del id con el id mas alto de los proyectos que hay en la base de datos y lo incrementamos en 1
         jid.setText(Integer.toString(obtenerIdMasAltoAlumno()));
     }
 
@@ -195,7 +197,10 @@ public class SwingAlumnoCRUD extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /*
+        INSERTAR ALUMNO
+    */
     private void btn_InsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_InsertarActionPerformed
 
         boolean condicion = dal.insertar(recogerDatos());
@@ -211,7 +216,10 @@ public class SwingAlumnoCRUD extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "ALUMNO NO SE HA PODIDO INSERTAR CORRECTAMENTE", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btn_InsertarActionPerformed
-
+    
+    /*
+        BORRAR ALUMNO
+    */
     private void btn_borrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_borrarActionPerformed
         // TODO add your handling code here:
         boolean condicion = dal.borrar(Integer.parseInt(jid.getText()));
@@ -222,7 +230,10 @@ public class SwingAlumnoCRUD extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "ALUMNO NO SE HA PODIDO BORRAR", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btn_borrarActionPerformed
-
+    
+    /*
+        CONSULTAR ALUMNO
+    */
     private void btn_consultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_consultarActionPerformed
         // TODO add your handling code here:
         try {
@@ -238,7 +249,10 @@ public class SwingAlumnoCRUD extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_btn_consultarActionPerformed
-
+    
+    /*
+        ACTUALIZAR ALUMNO
+    */
     private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
         // TODO add your handling code here:
         boolean condicion = dal.modificar(Integer.parseInt(jid.getText()), recogerDatos());
@@ -282,6 +296,10 @@ public class SwingAlumnoCRUD extends javax.swing.JFrame {
         });
     }
     
+    /**
+     * Metodo que devuelve un objeto alumno con los campos que recoge del SWING 
+     * @return Objeto Alumno con los campos que tiene recoge del SWING
+     */
     private Alumno recogerDatos(){
         String turno = (String) jCbTurno1.getModel().getSelectedItem();
         String curso = (String) jCbCurso.getModel().getSelectedItem();
@@ -290,6 +308,10 @@ public class SwingAlumnoCRUD extends javax.swing.JFrame {
         return a;
     }
     
+    /**
+     * Metodo que devuelve el id mas alto de los proyectos que hay en la base de datos y lo incrementamos en 1
+     * @return id mas alto incrementado en 1
+     */
     private static int obtenerIdMasAltoAlumno(){
         int id;
         

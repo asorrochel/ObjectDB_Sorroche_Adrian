@@ -6,13 +6,23 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+
+/**
+ * DAO DEL OBJETO PROYECTO
+ * @author Adrian
+ */
 public class ProyectoDao implements IDAO<Proyecto>{
     private EntityManager em;
     
     public ProyectoDao(EntityManager em) {
         this.em = em;
     }
-
+    
+    /**
+     * Metodo para insertar un proyecto en la BD pasandole un Objeto Proyecto
+     * @param o Proyecto
+     * @return Boolean
+     */
     @Override
     public boolean insertar(Proyecto o) {
         try {
@@ -33,6 +43,11 @@ public class ProyectoDao implements IDAO<Proyecto>{
         return false;
     }
 
+    /**
+     * Metodo para borrar un proyecto de la BD pasandole un ID
+     * @param id Id del proyecto que queremos borrar
+     * @return Boolean
+     */
     @Override
     public boolean borrar(int id) {
         try{
@@ -48,11 +63,19 @@ public class ProyectoDao implements IDAO<Proyecto>{
         }
     }
 
+    /**
+     * Metodo para actualizar un Proyecto en la BD
+     * @param id id del proyecto que queremos modificar
+     * @param nuevo Objeto Proyecto para aplicar las actualizaciones 
+     * @return Boolean
+     */
     @Override
     public boolean modificar(int id, Proyecto nuevo) {
         em.getTransaction().begin();
         Proyecto old = em.find(Proyecto.class, id);
         if (old != null) {
+             //En caso de que el objeto que le pasamos tenga algun campo vacio, ese campo no se actulizará
+            //ya que solo queremos actualizar los campos que sean distintos o que tengan contenido
             if(nuevo.getDescripcion()!= null) {
                 old.setDescripcion(nuevo.getDescripcion());
             }
@@ -74,7 +97,12 @@ public class ProyectoDao implements IDAO<Proyecto>{
             em.getTransaction().rollback();
             return false;
     }
-
+    
+    /**
+     * Metodo para consultar un Proyecto de la BD por su id
+     * @param id id del Proyecto que queremos consultar
+     * @return Objeto Proyecto
+     */
     @Override
     public Proyecto consultar(int id) {
         return em.find(Proyecto.class, id);
@@ -82,8 +110,8 @@ public class ProyectoDao implements IDAO<Proyecto>{
     
     /**
      * Metodo que comprueba si un Tutor tiene asignado un proyecto o no
-     * @param t
-     * @return 
+     * @param t id del tutor a comprobar
+     * @return True: Tiene proyecto, False: No tiene proyecto
      */
     private boolean comprobarIdTutor(int t){
         Query q = em.createQuery("SELECT c FROM Tutor c WHERE c.idTutor = :idTutor",Tutor.class);

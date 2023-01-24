@@ -46,6 +46,8 @@ public class Run {
         listaAlumnos = new ArrayList();
         listaTutores = new ArrayList();
         
+        //DESCOMENTAR PARA PROBAR LA FUNCIONALIDAD
+        
         //INSERTAR
         
             //insertamos 2 ALUMNOS a la BD
@@ -103,12 +105,12 @@ public class Run {
 //            aPrueba.setCurso("2º MULWEB");
 //            aPrueba.setTurno("Vespertino");
 //            aldao.insertar(aPrueba);
-////            //INSERTAR UN TUTOR
+//          //INSERTAR UN TUTOR
 //            Tutor tPrueba = new Tutor(obtenerIdMasAltoTutor());
 //            tPrueba.setNombre("Pedro");
 //            tPrueba.setTurno("Vespertino");
 //            tudao.insertar(tPrueba);
-//            //INSERTAR UN PROYECTO
+//          //INSERTAR UN PROYECTO
 //            Proyecto pPrueba = new Proyecto(obtenerIdMasAltoProyecto());
 //            pPrueba.setNombre("Proyecto Prueba");
 //            pPrueba.setDescripcion("Proyecto de prueba para probar");
@@ -117,7 +119,11 @@ public class Run {
 //            pPrueba.setIdTutor(tPrueba);
 //            prdao.insertar(pPrueba);
     }
-
+    
+    /**
+     * Metodo que crea e insertar X numero de alumnos a la BD
+     * @param j numero de alumnos que queremos crear e insertar a la BD
+     */
     private static void CrearEinsertarAlumnos(int j) {
         for (int i = 0; i < j; i++) {
             ramdomCursoTurno();
@@ -132,6 +138,11 @@ public class Run {
             aldao.insertar(a);
         }
     }
+    
+    /**
+     * Metodo que crea e insertar X numero de tutores a la BD
+     * @param j numero de tutores que queremos crear e insertar a la BD
+     */
     private static void CrearEinsertarTutores(int j) {
         for (int i = 0; i < j; i++) {
             ramdomCursoTurno();
@@ -144,9 +155,15 @@ public class Run {
             tudao.insertar(t);
         }
     }
+    
+    /**
+     * Metodo que crea e insertar X numero de proyectos a la BD
+     * @param j numero de proyectos que queremos crear e insertar a la BD
+     */
     private static void CrearEinsertarProyectos(int j) {
         for (int i = 0; i < j; i++) {
             //si el id del proyecto no esta asignado a ningun proyecto se le asigna, sino salta mensaje de que ese tutor ya esta asignado a un proyecto
+            //para poder utilizar este metodo tiene que ir complementado de los 2 metodos de creacion e insercion anteriores ya que recogemos aleatoriamente el alumno y el tutor de la lista
             Tutor tTemp = listaTutores.get(f.random().nextInt(0, listaTutores.size()-1));
             Alumno tAlum = listaAlumnos.get(f.random().nextInt(0, listaAlumnos.size()-1));
             
@@ -172,6 +189,7 @@ public class Run {
             turno = "Diurno";
         }
     }
+    
     /**
      * Metodo que devuelve el siguiente valor del id que deberá llevar el siguiente proyecto a insertar en la BD
      * @return id del proyecto con el valor mas alto en la BD + 1
@@ -192,6 +210,10 @@ public class Run {
             return 1;
         }
     }
+    /**
+     * Metodo que devuelve el siguiente valor del id que deberá llevar el siguiente alumno a insertar en la BD
+     * @return id del alumno con el valor mas alto en la BD + 1
+     */
     private static int obtenerIdMasAltoAlumno(){
         int id;
         

@@ -15,6 +15,10 @@ import javax.persistence.criteria.Root;
 import static run.Run.em;
 import static run.Run.emf;
 
+/**
+ * IMPORTANTE DESCOMENTAR DE 1 en 1 las consultas para probar su funcionalidad
+ * @author Adrian
+ */
 public class Consultas {
     
     static EntityManagerFactory emf;
@@ -27,34 +31,52 @@ public class Consultas {
         //emf = Persistence.createEntityManagerFactory("C:\\Users\\Vespertino\\Downloads\\objectdb-2.8.8\\db\\institutos.odb");
         em = emf.createEntityManager();
         
-        
         //Consulta 1:N proyectos con los alumnos y tutores de cada uno
         //consulta1NProyectos();
+        
         //Consulta 1:1 Todos los tutores y los proyectos de cada uno
         //consulta11Tutores();
+        
         //Consulta where
         //consultaWhereAlumnoTurno("Vespertino");
+        
         //Consulta Between
         //consultaBetwennProyectoHorasEstimadas(250,350);
+        
         //Consulta Where con operadores AND o OR
         //consultaProyectosConTutorYAlumno();
         
+        //----------------------------------------------
+        
         //EJEMPLOS JPQL
+        
         //System.out.println(obtenerIdMasAltoProyecto());
+        
         //System.out.println(comprobarIdTutor(2));
+        
         //consultarAlumno(1);
+        
         //consultarNombresTutores();
         
+         //----------------------------------------------
+         
         //EJEMPLOS CRITERIA
+        
         //consulta1NProyectosCRITERIA();
+        
         //consulta11TutoresCRITERIA();
+        
         //consultaWhereAlumnoTurnoCRITERIA("Vespertino");
+        
         //consultaProyectosConTutorYAlumnoCRITERIA();
+        
         //comprobarIdTutorCRITERIA(3);
+        
         //consultarAlumnoCRITERIA(2);
+        
         //consultarNombresTutoresCRITERIA();
     }
-
+    
     private static void consulta1NProyectos() {
         Query q = em.createQuery("SELECT c FROM Proyecto c",Proyecto.class);
         
@@ -86,6 +108,16 @@ public class Consultas {
         }
         
     }
+    private static void consultaBetwennProyectoHorasEstimadas(int n1, int n2) {
+        Query q = em.createQuery("SELECT c FROM Proyecto c WHERE c.horasEstimadas BETWEEN :n1 AND :n2",Proyecto.class);
+         q.setParameter("n1", n1);
+         q.setParameter("n2", n2);
+        List<Proyecto> listaProyectos = q.getResultList();
+        
+        for (Proyecto proyecto : listaProyectos) {
+            System.out.println(proyecto.toString());
+        }
+    }
     private static void consultaProyectosConTutorYAlumno() {
         Query q = em.createQuery("SELECT c FROM Proyecto c WHERE c.idAlumno != null AND c.idTutor != null",Proyecto.class);
         List<Proyecto> listaProyectos = q.getResultList();
@@ -99,8 +131,7 @@ public class Consultas {
     }
     
     // EJEMPLOS CONSULTAR DOCUMENTACION
-    
-    //JPQL
+        //JPQL
     
     private static int obtenerIdMasAltoProyecto(){
         int id;
@@ -114,7 +145,8 @@ public class Consultas {
                 return id+1;
             }
         } catch ( NullPointerException e) {
-            //Si no hay ningun proyecto creado, es decir hay 0, la consulta nos devolvera Null, asi que al primer proyecto le asignaremos el valor 1, después ya se autoincrementará
+            //Si no hay ningun proyecto creado, es decir hay 0, la consulta nos devolvera Null,
+            //asi que al primer proyecto le asignaremos el valor 1, después ya se autoincrementará
             return 1;
         }
     }
@@ -150,7 +182,7 @@ public class Consultas {
         }
     }
 
-    //CRITERIA
+        //CRITERIA
     
     private static void consulta1NProyectosCRITERIA() {
         CriteriaBuilder builder = em.getCriteriaBuilder();
